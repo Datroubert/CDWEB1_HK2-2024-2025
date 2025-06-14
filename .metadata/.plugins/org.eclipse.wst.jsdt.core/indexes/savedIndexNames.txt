@@ -1,8 +1,0 @@
-INDEX VERSION 1.4+C:\Users\My Laptop\SpringBoot-workspace\CDWEB1_HK2-2024-2025\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1425434799.index
-1623158464.index
-585175278.index
-557289398.index
-240912128.index
-784945827.index
-738420039.index
