@@ -117,7 +117,7 @@ public class AdController {
 	        model.addAttribute("ListCategory", categoryService.findAll());
 	        return "admin";
 	    }
-	    String uploadDir = "C:/uploads/"; // Thư mục ngoài code
+	    String uploadDir = "C:/Users/My Laptop/SpringBoot-workspace/CDWEB1_HK2-2024-2025/EcommerceProject/src/main/resources/static/"; // Thư mục ngoài code
 	    File uploadDirFile = new File(uploadDir);
 	    if (!uploadDirFile.exists()) {
 	        uploadDirFile.mkdirs();
@@ -130,7 +130,7 @@ public class AdController {
 	        e.printStackTrace();
 	        model.addAttribute("error", "Upload hình ảnh thất bại!");
 	        model.addAttribute("ListCategory", categoryService.findAll());
-	        return "admin";
+	        return "redirect:/admin";
 	    }
 	    Product product = new Product();
 	    product.setProductName(tensanpham);

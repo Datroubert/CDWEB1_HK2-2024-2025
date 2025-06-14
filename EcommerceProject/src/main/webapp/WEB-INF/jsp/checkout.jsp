@@ -61,7 +61,7 @@
 
 	<!-- Checkout Start -->
 	<div class="container-fluid">
-		<form action="thanhtoan" method="GET">
+		<form action="thanhtoan" method="post">
 			<input type="hidden" name="username"
 				value="${sessionScope.acc.getUsername()}">
 			<div class="row px-xl-5">
@@ -149,8 +149,8 @@
 							</div>
 						</div>
 						<div class="mb-5">
-							<input  name="giagoc" value="${TotalPrice}">
-							<input  name="giamgia"
+							<input hidden  name="giagoc" value="${TotalPrice}">
+							<input hidden  name="giamgia"
 								value="${TotalPrice*ValueOfCode/100}"> <input
 								type="hidden" name="thanhtien"
 								value="${TotalPrice-TotalPrice*ValueOfCode/100}">

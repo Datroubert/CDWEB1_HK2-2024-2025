@@ -48,23 +48,31 @@ public class PayController {
 	}
 	
 	@PostMapping("/thanhtoan")
-	public String payment(Model model) {
+	public String payment(Model model,@RequestParam("mail") String mailTo) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		List<Cart> carts = cartService.getCartByUsername(username);
 		double TotalPrice = 0;
 		int i = 0;
-		 // 3. Gửi mail
-	    mailService.sendEmail("ddhuyanh@gmail.com", "DON HANG", "Mã OTP của bạn là: ");
-//		for (Cart cart : carts) {
-//			TotalPrice += cart.getPrice() * cart.getAmount();
-//			i++;
-//		}
+	
+	  
+		for (Cart cart : carts) {
+			TotalPrice += cart.getPrice() * cart.getAmount();
+			i++;
+		}
 //		System.out.println(i);
+		// 3. Gửi mail
+		 try {
+		        mailService.sendEmail(mailTo, "1", "2"); // Hàm gửi mail bạn đã có
+		        model.addAttribute("mailSuccess", true); // Gửi biến báo hiệu thành công
+		    } catch (Exception e) {
+		        model.addAttribute("mailError", "Gửi mail thất bại: " + e.getMessage());
+		    }
+		
 		model.addAttribute("ListCart", carts);
 		model.addAttribute("TotalPrice", TotalPrice);
 
-		return "/checkout";
+		return "redirect:/checkout";
 	}
 
 	@GetMapping("/applyDiscount")

@@ -21,9 +21,8 @@ public class CategoryService {
 		return (Category) categoryRepository.getById(id);
 	}
 
-	public Category findCategoryByName(String phanLoai) {
-		// TODO Auto-generated method stub
-		return null;
+	public Category findCategoryByName(String name) {
+	    return categoryRepository.findByNameCategory(name);
 	}
 	
 	

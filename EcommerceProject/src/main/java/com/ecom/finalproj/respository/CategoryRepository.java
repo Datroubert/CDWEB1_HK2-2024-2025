@@ -8,4 +8,6 @@ import com.ecom.finalproj.model.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
+	  // Thêm phương thức này để tìm category theo tên
+    Category findByNameCategory(String nameCategory);
 }

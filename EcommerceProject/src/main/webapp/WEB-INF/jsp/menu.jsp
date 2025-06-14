@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +26,16 @@
 
 </head>
 <body>
-
+<c:if test="${mailSuccess}">
+    <script>
+        alert("Đã gửi mail");
+    </script>
+</c:if>
+<c:if test="${not empty mailError}">
+    <script>
+        alert("Gửi mail thất bại: ${mailError}");
+    </script>
+</c:if>
 	<!-- menu bar -->
 	<div class="container-fluid">
 		<div class="row bg-secondary py-1 px-xl-5"></div>
@@ -55,9 +64,8 @@
 			<div class="col-lg-auto col-6  text-left">
 				<form action="search" method="get">
 					<div class="input-group">
-						<input type="text"
-							class="form-control" placeholder="Tìm sản phẩm..."
-							name="search">
+						<input type="text" class="form-control"
+							placeholder="Tìm sản phẩm..." name="search">
 						<div class="input-group-append">
 
 							<button class="input-group-text bg-transparent text-primary"
@@ -71,8 +79,9 @@
 			<div class="col-lg-auto  col-6 text-right d-flex">
 
 				<div class="cart px-3">
-					<a href="/cart?username=${sessionScope.acc.getUsername()}" class="btn border "> <i
-						class="fas fa-shopping-cart text-dark"></i> <span class="badge">${cart.getAllCartByUser(sessionScope.acc.getUsername())}</span>
+					<a href="/cart?username=${sessionScope.acc.getUsername()}"
+						class="btn border "> <i class="fas fa-shopping-cart text-dark"></i>
+						<span class="badge">${cart.getAllCartByUser(sessionScope.acc.getUsername())}</span>
 					</a>
 
 				</div>
@@ -80,19 +89,22 @@
 
 
 					<div>
-							<div class="dropdown">
-								<a class="btn btn-secondary dropdown-toggle" role="button"
-									data-bs-toggle="dropdown" aria-expanded="false">
-									${sessionScope.acc.getUsername()} </a>
+						<div class="dropdown">
+							<a class="btn btn-secondary dropdown-toggle" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								${sessionScope.acc.getUsername()} </a>
 
-								<ul class="dropdown-menu">
-									<li><a class="dropdown-item" href="profile">Thông tin
-											tài khoản</a></li>
-									<li><a class="dropdown-item" href="cart?username=${sessionScope.acc.getUsername()}">Giỏ hàng</a></li>
-									<li><a class="dropdown-item" href="logoutPerfome">Đăng xuất</a></li>
-								</ul>
-							</div>
-											
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="profile">Thông tin
+										tài khoản</a></li>
+								<li><a class="dropdown-item"
+									href="cart?username=${sessionScope.acc.getUsername()}">Giỏ
+										hàng</a></li>
+								<li><a class="dropdown-item" href="logoutPerfome">Đăng
+										xuất</a></li>
+							</ul>
+						</div>
+
 					</div>
 
 				</div>
