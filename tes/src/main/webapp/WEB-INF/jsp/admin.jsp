@@ -429,7 +429,7 @@
 									<div class="modal-body">
 
 										<form class="form-user" method="post"
-											action="admin/themsanpham" >
+											action="admin/themsanpham" enctype="multipart/form-data">
 											<%-- <div class="form-group">
 												<label>Mã sản phẩm</label> <input readonly="readonly"
 													type="text" class="form-control" name="ProductID"

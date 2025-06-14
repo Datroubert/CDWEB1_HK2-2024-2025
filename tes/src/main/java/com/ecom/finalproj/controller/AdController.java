@@ -1,5 +1,9 @@
 package com.ecom.finalproj.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ecom.finalproj.model.Account;
@@ -95,17 +100,52 @@ public class AdController {
 	}
 
 	@PostMapping("/themsanpham")
-	public String themSanPham(@RequestParam("tensanpham") String tensanpham, @RequestParam ("phanloai") String phanloai, @RequestParam("mota") String mota,@RequestParam("gia") String gia, @RequestParam("soluongkho") String soluongkho,@RequestParam("mau") String mau,@RequestParam("img") String img) {
-		int gia1 = Integer.parseInt(gia);
-		int soluong1 = Integer.parseInt(soluongkho);
-		Random random= new Random();
-		int id = random.nextInt(999);
-		Product product = new Product(id, tensanpham, 1, mota, gia1, soluong1, " ", img, mau);
-		if(product != null) {
-			productService.addProduct(product);
-		}
-		return "redirect:/admin";
-	}
+	public String themSanPham(@RequestParam("tensanpham") 
+	String tensanpham, 
+	  @RequestParam("tensanpham") String tenSanPham,
+      @RequestParam("phanloai") String phanLoai,
+      @RequestParam("mota") String moTa,
+      @RequestParam("gia") String gia,
+      @RequestParam("soluongkho") String soLuongKho,
+      @RequestParam("mau") String mau,
+      @RequestParam("img") MultipartFile img,
+      Model model,
+      RedirectAttributes redirect
+) {
+	    if (img == null || img.isEmpty()) {
+	        model.addAttribute("error", "Vui lòng chọn hình ảnh!");
+	        model.addAttribute("ListCategory", categoryService.findAll());
+	        return "admin";
+	    }
+	    String uploadDir = "C:/uploads/"; // Thư mục ngoài code
+	    File uploadDirFile = new File(uploadDir);
+	    if (!uploadDirFile.exists()) {
+	        uploadDirFile.mkdirs();
+	    }
+	    String storedFileName = System.currentTimeMillis() + "_" + img.getOriginalFilename();
+	    try {
+	        Path path = Paths.get(uploadDir + storedFileName);
+	        img.transferTo(path.toFile());
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        model.addAttribute("error", "Upload hình ảnh thất bại!");
+	        model.addAttribute("ListCategory", categoryService.findAll());
+	        return "admin";
+	    }
+	    Product product = new Product();
+	    product.setProductName(tensanpham);
+	    
+	    product.setCategoryID(categoryService.findCategoryByName(phanLoai).getIdCategory());
+	    product.setDescription(moTa);
+	    product.setPrice(Integer.parseInt(gia));
+	    product.setStockQuantity(Integer.parseInt(soLuongKho));
+	    product.setColor(mau);
+	    product.setImgPath("/img/" + storedFileName);
+	    productService.save(product);
+	    redirect.addFlashAttribute("success", "Thêm sản phẩm thành công!");
+	    return "redirect:/admin";
+	
+    }
 	
 	@GetMapping("/setrole")
 	public String setRole(@RequestParam String username, RedirectAttributes redirectAttributes) {

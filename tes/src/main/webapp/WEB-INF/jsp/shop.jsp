@@ -371,7 +371,24 @@
 			
 	   }
 	
-	
+	   <!-- send_mail.jsp -->
+	   <form method="post" action="/send-mail">
+	       <input name="to" required>
+	       <input name="subject" required>
+	       <textarea name="content" required></textarea>
+	       <button type="submit">Gửi mail</button>
+	   </form>
+
+	   <c:if test="${mailSuccess}">
+	       <script>
+	           alert("Đã gửi mail");
+	       </script>
+	   </c:if>
+	   <c:if test="${not empty mailError}">
+	       <script>
+	           alert("Gửi mail thất bại: ${mailError}");
+	       </script>
+	   </c:if>
 	
 	</script>
 
@@ -381,6 +398,7 @@
 
 	<!-- Template Javascript -->
 	<script src="${pageContext.request.contextPath}/js/main.js"></script>
+	
 </body>
 
 
