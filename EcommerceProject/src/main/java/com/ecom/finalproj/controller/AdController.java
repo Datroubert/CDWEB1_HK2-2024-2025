@@ -117,12 +117,12 @@ public class AdController {
 	        model.addAttribute("ListCategory", categoryService.findAll());
 	        return "admin";
 	    }
-	    String uploadDir = "C:/Users/My Laptop/SpringBoot-workspace/CDWEB1_HK2-2024-2025/EcommerceProject/src/main/resources/static/"; // Thư mục ngoài code
+	    String uploadDir = "C:/Users/My Laptop/SpringBoot-workspace/CDWEB1_HK2-2024-2025/EcommerceProject/src/main/resources/static/img/"; // Thư mục ngoài code
 	    File uploadDirFile = new File(uploadDir);
 	    if (!uploadDirFile.exists()) {
 	        uploadDirFile.mkdirs();
 	    }
-	    String storedFileName = System.currentTimeMillis() + "_" + img.getOriginalFilename();
+	    String storedFileName = img.getOriginalFilename();
 	    try {
 	        Path path = Paths.get(uploadDir + storedFileName);
 	        img.transferTo(path.toFile());
@@ -140,7 +140,8 @@ public class AdController {
 	    product.setPrice(Integer.parseInt(gia));
 	    product.setStockQuantity(Integer.parseInt(soLuongKho));
 	    product.setColor(mau);
-	    product.setImgPath("/img/" + storedFileName);
+	    product.setUnit_price("VND");
+	    product.setImgPath(storedFileName);
 	    productService.save(product);
 	    redirect.addFlashAttribute("success", "Thêm sản phẩm thành công!");
 	    return "redirect:/admin";

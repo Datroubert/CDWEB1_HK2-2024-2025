@@ -511,7 +511,7 @@
 
 										<td scope="row">${CateDAO.getCategoryByID(product.getCategoryID())}</td>
 
-										<td scope="row">${product.getUnit_price()}${product.getPrice()}</td>
+										<td scope="row">${product.getPrice()} ${product.getUnit_price()}</td>
 
 										<td scope="row">${product.getStockQuantity()}</td>
 										<td scope="row">${product.getColor()}</td>

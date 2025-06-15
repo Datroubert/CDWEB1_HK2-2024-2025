@@ -15,9 +15,11 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface ProductRespository extends JpaRepository<Product, Integer> {
 
-	
 	public Product findById(int productId);
 
-	public  List<Product> findByProductName(String productName);
-	
+	public List<Product> findByProductName(String productName);
+
+	// Tìm các sản phẩm có tên chứa keyword (không phân biệt hoa thường)
+	List<Product> findByProductNameContainingIgnoreCase(String productName);
+
 }

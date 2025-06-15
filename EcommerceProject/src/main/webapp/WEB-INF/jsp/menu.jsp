@@ -25,17 +25,40 @@
 
 
 </head>
+<script>
+$(document).on('click', '.btn-add-cart', function(e) {
+    e.preventDefault();
+    var productId = $(this).data('product-id');
+    $.ajax({
+        url: '/cart/add',
+        method: 'POST',
+        data: { },
+        success: function(res) {
+            if(res.success) {
+                $('#cart-count').text(res.cartCount); // Cập nhật badge số lượng
+                // Có thể thêm hiệu ứng/thông báo ở đây
+                alert('Đã thêm vào giỏ hàng!');
+            } else {
+                alert('Thêm vào giỏ hàng thất bại!');
+            }
+        },
+        error: function() {
+            alert('Có lỗi xảy ra!');
+        }
+    });
+});
+</script>
 <body>
-<c:if test="${mailSuccess}">
-    <script>
-        alert("Đã gửi mail");
-    </script>
-</c:if>
-<c:if test="${not empty mailError}">
-    <script>
-        alert("Gửi mail thất bại: ${mailError}");
-    </script>
-</c:if>
+	<c:if test="${mailSuccess}">
+		<script>
+			alert("Đã gửi mail");
+		</script>
+	</c:if>
+	<c:if test="${not empty mailError}">
+		<script>
+			alert("Gửi mail thất bại: ${mailError}");
+		</script>
+	</c:if>
 	<!-- menu bar -->
 	<div class="container-fluid">
 		<div class="row bg-secondary py-1 px-xl-5"></div>
@@ -61,6 +84,8 @@
 
 				</div>
 			</div>
+
+			<!-- SEARCH AJAX -->
 			<div class="col-lg-auto col-6  text-left">
 				<form action="search" method="get">
 					<div class="input-group">
@@ -76,13 +101,14 @@
 					</div>
 				</form>
 			</div>
+			
 			<div class="col-lg-auto  col-6 text-right d-flex">
 
 				<div class="cart px-3">
-					<a href="/cart?username=${sessionScope.acc.getUsername()}"
-						class="btn border "> <i class="fas fa-shopping-cart text-dark"></i>
-						<span class="badge">${cart.getAllCartByUser(sessionScope.acc.getUsername())}</span>
-					</a>
+					<a href="/cart" class="btn border">
+    <i class="fas fa-shopping-cart text-dark"></i>
+    <span class="badge" id="cart-count">${cartCount}</span>
+</a>
 
 				</div>
 				<div class="cart">
@@ -117,6 +143,41 @@
 	<!-- Topbar End -->
 
 	<!-- ajax -->
+
+	<script>
+	$(function() {
+	    $("#searchInput").on("input", function() {
+	        var query = $(this).val();
+	        if (query === "") {
+	            // Có thể load lại toàn bộ sản phẩm nếu muốn
+	            $("#product-list").empty();
+	            return;
+	        }
+	        $.ajax({
+	            url : "api/searchProduct", // hoặc "/api/searchProduct" nếu controller mapping như vậy
+	            method : "GET",
+	            data : { keyword : query },
+	            success : function(data) {
+	                var html = "";
+	                if(data.length === 0) {
+	                    html = "<div>Không tìm thấy sản phẩm nào.</div>";
+	                } else {
+	                    data.forEach(function(product) {
+	                        html += `
+	                        <div class="product-card">
+	                            <img src="${product.imgPath}" alt="${product.productName}" style="width:100px;height:100px;">
+	                            <div><b>${product.productName}</b></div>
+	                            <div>Giá: ${product.price} ₫</div>
+	                        </div>
+	                        `;
+	                    });
+	                }
+	                $("#product-list").html(html);
+	            }
+	        });
+	    });
+	});
+	</script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script

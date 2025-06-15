@@ -56,6 +56,7 @@
 
 
 	<!-- San pham -->
+	
 	<div class="container-fluid">
 		<div class="row px-xl-5">
 			<!-- bo loc san pham start -->
@@ -161,9 +162,9 @@
 											href="detail?ProductID=${product.getProductID()}">${product.getProductName()}</a>
 										<div
 											class="d-flex align-items-center justify-content-center mt-2">
-											<h5>${product.getUnit_price()}${product.getPrice()}</h5>
+											<h5>${product.getPrice()} ${product.getUnit_price()}</h5>
 											<h6 class="text-muted ml-2">
-												<del>${product.getUnit_price()}${product.getPrice()}</del>
+												<del>${product.getPrice()} ${product.getUnit_price()}</del>
 											</h6>
 										</div>
 										<div

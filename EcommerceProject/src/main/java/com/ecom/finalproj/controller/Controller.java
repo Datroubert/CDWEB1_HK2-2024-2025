@@ -16,6 +16,7 @@ import com.ecom.finalproj.model.Category;
 import com.ecom.finalproj.model.Discount;
 import com.ecom.finalproj.model.Product;
 import com.ecom.finalproj.service.AccountService;
+import com.ecom.finalproj.service.CartService;
 import com.ecom.finalproj.service.CategoryService;
 import com.ecom.finalproj.service.DiscountService;
 import com.ecom.finalproj.service.ProductService;
@@ -39,6 +40,9 @@ public class Controller {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired 
+	private CartService cartService;
 
 	@GetMapping("/home")
 	public String getHomePage(Model model,HttpSession session) {
@@ -52,7 +56,9 @@ public class Controller {
 		System.out.print(false);
 		List<Category> ListCategory = categoryService.findAll();
 		List<Product> ListProduct = productService.getAllProd();
+		int cartCount = cartService.sumCart(account.getUsername());
 
+		model.addAttribute("cartCount", cartCount);
 		model.addAttribute("ListProduct", ListProduct);
 		model.addAttribute("ListCategory", ListCategory);
 		return "index";
@@ -150,12 +156,12 @@ public class Controller {
 	@GetMapping("/search")
 	public ModelAndView searchProducts(@RequestParam("search") String keyword) {
 		ModelAndView view = new ModelAndView("shop");
-		List<Product> ListProduct = productService.searchProducts(keyword);
+		List<Product> ListProduct = productService.findByProductNameContainingIgnoreCase(keyword);
 		List<Category> ListCategory = categoryService.findAll();
 
 		view.addObject("ListCategory", ListCategory);
 		view.addObject("ListProduct", ListProduct);
-		productService.searchProducts(keyword);
+		productService.findByProductNameContainingIgnoreCase(keyword);
 
 		return view;
 	}

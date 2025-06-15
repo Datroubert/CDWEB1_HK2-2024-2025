@@ -3,6 +3,7 @@ package com.ecom.finalproj.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.tags.shaded.org.apache.bcel.generic.RETURN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,18 +25,19 @@ public class ProductService {
 
 	}
 
-	public List<Product> searchProducts(String keyword) {
-		return resp.findByProductName(keyword);
+	public List<Product> findByProductNameContainingIgnoreCase(String productName) {
+		return resp.findByProductNameContainingIgnoreCase(productName);
 	}
 
 	public List<Product> getAllProd() {
 		return resp.findAll();
 	}
+
 	public List<Product> getAllProdByCategoryID(int id) {
 		List<Product> temp = new ArrayList<>();
 		List<Product> arr = getAllProd();
 		for (Product product : arr) {
-			if(product.getCategoryID()==id) {
+			if (product.getCategoryID() == id) {
 				temp.add(product);
 			}
 		}
@@ -50,9 +52,9 @@ public class ProductService {
 	public long totalProduct() {
 		return resp.count();
 	}
-	
+
 	public Product addProduct(Product product) {
-		
+
 		return resp.save(product);
 	}
 
@@ -60,7 +62,14 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		return resp.findById(productId);
 	}
+
 	public void deleteById(int productId) {
 		resp.deleteById(productId);
 	}
+
+//	// tim kiem san pham bang keyword
+//	public List<Product> searchByKeyword(String productName) {
+//		return resp.findByNameContainingIgnoreCase(productName);
+//	}
+
 }

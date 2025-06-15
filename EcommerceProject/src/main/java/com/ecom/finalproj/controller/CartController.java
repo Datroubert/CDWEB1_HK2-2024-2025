@@ -1,6 +1,8 @@
 package com.ecom.finalproj.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -110,5 +112,39 @@ public class CartController  {
 		cartService.increaseCart(idCart,soluong);
 		return "redirect:/cart";
 	}
-	
+	@PostMapping("cart/add")
+	@ResponseBody
+	public Map<String, Object> addToCart(
+	        @RequestParam int productId,
+	        @RequestParam(defaultValue = "1") int quantity,
+	        HttpSession session) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String username = authentication.getName();
+
+	    Product product = service.findById(productId);
+	    Cart newCart = new Cart(username, productId, product.getProductName(), quantity, product.getPrice(), product.getImgPath());
+
+	    List<Cart> liCarts = cartService.getCartByUsername(username);
+	    if(!liCarts.isEmpty()) {
+	        if(cartService.contain(liCarts, productId)) {
+	            for (Cart cart : liCarts) {
+	                if(newCart.getProductID() == cart.getProductID()) {
+	                    cart.setAmount(cart.getAmount() + newCart.getAmount());
+	                    cartService.updateSoLuong(cart.getIdCart(), cart.getAmount());
+	                }
+	            }
+	        } else {
+	            cartService.save(newCart);
+	        }
+	    } else {
+	        cartService.save(newCart);
+	    }
+	    // Đếm tổng số sản phẩm trong giỏ
+	    int cartCount = cartService.getCartByUsername(username)
+	        .stream().mapToInt(Cart::getAmount).sum();
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("success", true);
+	    result.put("cartCount", cartCount);
+	    return result;
+	}
 }

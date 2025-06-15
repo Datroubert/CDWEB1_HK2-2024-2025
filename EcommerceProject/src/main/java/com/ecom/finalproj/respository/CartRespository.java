@@ -24,5 +24,5 @@ public interface CartRespository extends JpaRepository<Cart, Long> {
 	    @Transactional
 		@Query("UPDATE Cart c SET c.amount = :soluong WHERE c.idCart = :idCart")
 	public void increaseCart(Long idCart, int soluong);
-
+//	public int sumCartByUser(String username);
 }
