@@ -26,8 +26,8 @@ public class PayController {
 	CartService cartService;
 	@Autowired
 	DiscountService discountService;
-	@Autowired MailService mailService;
-	
+	@Autowired
+	MailService mailService;
 
 	@GetMapping("/checkout")
 	public String checkoutpage(Model model) {
@@ -46,29 +46,33 @@ public class PayController {
 
 		return "checkout";
 	}
-	
+
 	@PostMapping("/thanhtoan")
-	public String payment(Model model,@RequestParam("mail") String mailTo) {
+	public String payment(Model model, @RequestParam("mail") String mailTo) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		List<Cart> carts = cartService.getCartByUsername(username);
 		double TotalPrice = 0;
 		int i = 0;
-	
-	  
+		String content = "";
+
 		for (Cart cart : carts) {
 			TotalPrice += cart.getPrice() * cart.getAmount();
+			content += cart.getProductName() + "\t" + "SL: " + cart.getAmount() + "\t" + "Đơn giá: " + cart.getPrice()
+					+ "\t" + "Giá: " + cart.getAmount() * cart.getPrice() + "\n";
 			i++;
 		}
+		content = content + "Tổng cộng: " + TotalPrice;
 //		System.out.println(i);
 		// 3. Gửi mail
-		 try {
-		        mailService.sendEmail(mailTo, "1", "2"); // Hàm gửi mail bạn đã có
-		        model.addAttribute("mailSuccess", true); // Gửi biến báo hiệu thành công
-		    } catch (Exception e) {
-		        model.addAttribute("mailError", "Gửi mail thất bại: " + e.getMessage());
-		    }
-		
+		try {
+			String subject = "Xác nhận đơn hàng " + username;
+			mailService.sendEmail(mailTo, subject, content); // Hàm gửi mail bạn đã có
+			model.addAttribute("mailSuccess", true); // Gửi biến báo hiệu thành công
+		} catch (Exception e) {
+			model.addAttribute("mailError", "Gửi mail thất bại: " + e.getMessage());
+		}
+
 		model.addAttribute("ListCart", carts);
 		model.addAttribute("TotalPrice", TotalPrice);
 

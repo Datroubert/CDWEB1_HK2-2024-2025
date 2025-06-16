@@ -63,7 +63,7 @@ public class CartController  {
 		Product product = service.findById(ProductID);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		Cart newCart = new Cart(username, ProductID, "ip", soluong, product.getPrice(), product.getImgPath());
+		Cart newCart = new Cart(username, ProductID, product.getProductName(), soluong, product.getPrice(), product.getImgPath());
 ////		cartService.save(newCart);
 		List<Cart> liCarts = cartService.getCartByUsername(username);
 		if(!liCarts.isEmpty()) {
